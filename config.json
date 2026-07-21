@@ -1,0 +1,29 @@
+{
+  "username": "flavioraise",
+  "name": "Flavio Raise",
+  "role": "Junior Software Developer",
+  "education": "ITIS \"C. Zuccante\", Mestre — IT, Systems & Networks (92/100)",
+  "location": "Mestre · Venice, Italy",
+  "timezone": "Europe/Rome",
+  "email": "flavio.raise07@gmail.com",
+  "website": "flavioraise.com",
+  "ascii_cols": 60,
+  "stack": {
+    "Frontend": ["HTML", "CSS", "JavaScript", "Dart", "Android Studio"],
+    "Backend": ["Java", "Python", "PHP", "SQL", "MySQL", "XAMPP"],
+    "AI-ML": ["Ollama", "Qlik", "Python"],
+    "Cloud": ["Docker", "Git", "Microsoft 365", "Cisco CCNA1"]
+  },
+  "highlights": [
+    "Diploma in IT, Systems & Telecom — 92/100 (2026)",
+    "DB & data intern @ Data4Prime — Qlik dashboards & AI tooling"
+  ],
+  "theme": {
+    "bg": "#0d1117",
+    "fg": "#c9d1d9",
+    "dim": "#8b949e",
+    "green": "#39d353",
+    "prompt_path": "#58a6ff",
+    "levels": ["#161b22", "#0e4429", "#006d32", "#26a641", "#39d353"]
+  }
+}

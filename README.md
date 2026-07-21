@@ -1,16 +1,12 @@
-## Hi there 👋
-
 <!--
-**flavioraise/flavioraise** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
-
-Here are some ideas to get you started:
-
-- 🔭 I’m currently working on ...
-- 🌱 I’m currently learning ...
-- 👯 I’m looking to collaborate on ...
-- 🤔 I’m looking for help with ...
-- 💬 Ask me about ...
-- 📫 How to reach me: ...
-- 😄 Pronouns: ...
-- ⚡ Fun fact: ...
+  This README is auto-generated.
+  - Edit personal content in  config.json
+  - Edit layout / animation in scripts/generate.py
+  - Regenerate locally with:  python scripts/generate.py
+  A daily GitHub Actions workflow (.github/workflows/profile.yml) refreshes the
+  contribution calendar and commits the updated SVGs.
 -->
+
+<img src="./assets/contributions.svg" width="820" alt="flavioraise@github ~ $ ./contributions.sh" />
+
+<img src="./assets/neofetch.svg" width="820" alt="flavioraise@github ~ $ whoami" />
