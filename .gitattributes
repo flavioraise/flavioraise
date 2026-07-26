@@ -1,0 +1,11 @@
+# The profile SVGs are generated artifacts (scripts/generate.py). The daily CI
+# workflow regenerates and commits them, which otherwise collides with locally
+# regenerated copies on every pull/rebase. The custom "regen-svg" merge driver
+# resolves any such conflict by re-running the generator, so the merged result
+# is always a fresh, source-consistent SVG instead of a manual conflict.
+#
+# The driver must be registered once per clone (it lives in .git/config, which
+# is not shared). Run scripts/setup-merge-driver.sh — or:
+#   git config merge.regen-svg.name "regenerate profile SVGs"
+#   git config merge.regen-svg.driver "python scripts/generate.py && cp %P %A"
+assets/*.svg merge=regen-svg
