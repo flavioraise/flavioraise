@@ -24,7 +24,10 @@ from PIL import Image, ImageFilter, ImageOps
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CONFIG = os.path.join(ROOT, "config.json")
-ASSETS = os.path.join(ROOT, "assets")
+# Output dir defaults to ./assets, but can be redirected (e.g. by the git merge
+# driver, which regenerates into a scratch dir so it never touches the tracked
+# working-tree copies mid-rebase).
+ASSETS = os.environ.get("PROFILE_OUT_DIR") or os.path.join(ROOT, "assets")
 
 MONO = "ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,'Liberation Mono',monospace"
 MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",

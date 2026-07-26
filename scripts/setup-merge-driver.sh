@@ -7,8 +7,10 @@ set -e
 cd "$(git rev-parse --show-toplevel)"
 
 # 1. Register the driver implementation (lives in .git/config, not tracked).
+#    The helper regenerates into a scratch dir and writes only git's result file
+#    (%A), so it never dirties the tracked working-tree SVGs during a rebase.
 git config merge.regen-svg.name "regenerate profile SVGs"
-git config merge.regen-svg.driver "python scripts/generate.py && cp %P %A"
+git config merge.regen-svg.driver "sh scripts/regen-svg-merge.sh %O %A %P"
 
 # 2. Also map the attribute in .git/info/attributes. The tracked .gitattributes
 #    only applies once its commit is checked out, so it can't self-resolve the
