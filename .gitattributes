@@ -1,11 +1,15 @@
-# The profile SVGs are generated artifacts (scripts/generate.py). The daily CI
-# workflow regenerates and commits them, which otherwise collides with locally
-# regenerated copies on every pull/rebase. The custom "regen-svg" merge driver
-# resolves any such conflict by re-running the generator, so the merged result
-# is always a fresh, source-consistent SVG instead of a manual conflict.
+# The profile SVGs are build artifacts of scripts/generate.py. The daily CI
+# workflow regenerates and commits them, so they collide with locally
+# regenerated copies on every pull/rebase.
 #
-# The driver must be registered once per clone (it lives in .git/config, which
-# is not shared). Run scripts/setup-merge-driver.sh — or:
-#   git config merge.regen-svg.name "regenerate profile SVGs"
-#   git config merge.regen-svg.driver "python scripts/generate.py && cp %P %A"
-assets/*.svg merge=regen-svg
+# Your local commit already contains an SVG that matches its own config.json, so
+# on a REBASE the right resolution is simply to keep the replayed commit's copy.
+# The "keep-local-svg" merge driver does exactly that (cp %B %A) — no
+# regeneration, no network, and no dependency on any tracked file, so it even
+# resolves the first rebase that introduces it. It relies on pulls being rebases
+# (setup-merge-driver.sh sets pull.rebase=true); a plain non-rebase merge would
+# invert %A/%B and is not the supported flow.
+#
+# Register it once per clone with scripts/setup-merge-driver.sh (the driver lives
+# in .git/config, which is not tracked).
+assets/*.svg merge=keep-local-svg

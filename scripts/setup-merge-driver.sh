@@ -1,23 +1,27 @@
 #!/usr/bin/env sh
-# Register the "regen-svg" merge driver referenced by .gitattributes.
-# The driver config lives in .git/config, which is NOT tracked, so each clone
-# must run this once. On a conflict in assets/*.svg it re-runs the generator and
-# uses the fresh output as the merge result — no manual conflict resolution.
+# One-time per-clone setup so pull/rebase never stops on a generated-SVG conflict.
+#
+# The daily CI workflow regenerates and commits assets/*.svg, which conflicts with
+# your locally regenerated copies. Your local commit's SVG already matches its own
+# config.json, so on a rebase we just keep the replayed commit's version.
 set -e
 cd "$(git rev-parse --show-toplevel)"
 
-# 1. Register the driver implementation (lives in .git/config, not tracked).
-#    The helper regenerates into a scratch dir and writes only git's result file
-#    (%A), so it never dirties the tracked working-tree SVGs during a rebase.
-git config merge.regen-svg.name "regenerate profile SVGs"
-git config merge.regen-svg.driver "sh scripts/regen-svg-merge.sh %O %A %P"
+# 1. Always rebase on pull, so `git pull` never creates a merge commit and the
+#    driver's %A/%B roles stay consistent (%B = the replayed local commit).
+git config pull.rebase true
 
-# 2. Also map the attribute in .git/info/attributes. The tracked .gitattributes
-#    only applies once its commit is checked out, so it can't self-resolve the
-#    very rebase that introduces it. .git/info/attributes is per-clone and always
-#    active, so the driver fires on every pull/rebase regardless.
+# 2. The "keep-local-svg" driver keeps the replayed commit's SVG (%B) as the
+#    result. It touches no tracked file, so it works even on the first rebase
+#    that introduces this setup. Lives in .git/config (not tracked).
+git config merge.keep-local-svg.name "keep the local commit's generated SVG"
+git config merge.keep-local-svg.driver "cp %B %A"
+
+# 3. Mirror the attribute into .git/info/attributes (per-clone, always active
+#    regardless of the checked-out tree) so the driver fires on every rebase,
+#    including the one that first adds the tracked .gitattributes.
 attrs="$(git rev-parse --git-dir)/info/attributes"
-line="assets/*.svg merge=regen-svg"
+line="assets/*.svg merge=keep-local-svg"
 grep -qxF "$line" "$attrs" 2>/dev/null || printf '%s\n' "$line" >> "$attrs"
 
-echo "Registered 'regen-svg' merge driver. Pulls/rebases now auto-resolve assets/*.svg."
+echo "Done. 'git pull' now rebases and auto-resolves assets/*.svg conflicts."
